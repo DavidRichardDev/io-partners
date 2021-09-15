@@ -36,7 +36,41 @@ const PartnerSchema = new Schema({
     timestamps: true,
 })
 
-// PartnerSchema.path('document').index({unique: true});
-PartnerSchema.index({document: 1});
+
+// const PartnerSchema = new Schema({
+//   id: String, 
+//   tradingName: String,
+//   ownerName: String,
+//   document: {type: String, unique: true},
+//   coverageArea: {
+//                   type: {
+//                     type: String,
+//                     enum: ['MultiPolygon'],
+//                     required: true
+//                   },
+//                   coordinates: {
+//                     type: [[[[Number]]]],
+//                     required: true
+//                   }
+//   },
+//   address: {
+//               type: {
+//                 type: String,
+//                 enum: ['Point'],
+//                 required: true
+//               },
+//               coordinates: {
+//                 type: [Number],
+//                 required: true
+//               }
+//   }
+// },{
+//   timestamps: true,
+// })
+
+PartnerSchema.path('document').index({unique: true});
+// PartnerSchema.index({document: 1});
+PartnerSchema.index({ "coverageArea": "2dsphere" })
+PartnerSchema.index({ "adress": "2dsphere" })
 
 export default model<PartnerInterface>('Partner', PartnerSchema)

@@ -30,6 +30,38 @@ class PartnerController {
             })
         }
     }
+
+    public async find (request: Request, response: Response): Promise <Response> {
+        // const { lat, long } = request.params;
+
+        // console.log(`lat:${lat} long:${long}`);
+
+        // const partner = await Partner.find({ coordinates : { $near : {$geometry: {type: "MultiPolygon", coordinates:[-46.57421, -52.56489]}} }})
+
+        const partner = await Partner.find({ coordinates : { $nearSphere : [-46.57421, -52.56489]}})
+
+        return response.status(200).json(partner);
+        
+        // try {
+        //     if(lat && long){
+        //         const partner = await Partner.find({ coordinates : { $near : {$geometry: {type: "MultiPolygon", coordinates:[-46.57421, -52.56489]}} }})
+        //         // const partner = await Partner.find({ coordinates : { $near : [long, lat]} })
+
+        //         console.log(partner)
+        
+        //         return response.status(200).json(partner);
+        //     }else{
+        //         return response.status(400).json({
+        //             message: "Is needed latitude and longitude fields"
+        //         })
+        //     }
+            
+        // } catch (err) {
+        //     return response.status(400).json({
+        //       message: err.message || 'Unexpected error.'
+        //     })
+        // }
+    }
 }
 
 export default new PartnerController()
