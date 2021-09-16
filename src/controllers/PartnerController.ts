@@ -32,24 +32,49 @@ class PartnerController {
     }
 
     public async find (request: Request, response: Response): Promise <Response> {
-        // const { lat, long } = request.params;
+        const lat = request.query.lat;
+        const long = request.query.long;
+        let latNumber = [parseFloat(long), parseFloat(lat)];
+        const partner = await Partner.aggregate([{ 
+                                            
+                                                $geoNear: {
+                                                    key: 'address',
+                                                    query:{
+                                                        'coverageArea' : { 
+                                                            '$geoIntersects' : {
+                                                                '$geometry': {
+                                                                    'type': "Point", 'coordinates': latNumber
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    distanceField: 'calc',
+                                                    includeLocs: 'dist.locs',
+                                                    spherical: true,                                                  
+                                                    near: {
+                                                        type: "Point", coordinates: latNumber
+                                                    }
+                                                } 
+                                        }]).sort('-calc');
 
-        // console.log(`lat:${lat} long:${long}`);
-
-        // const partner = await Partner.find({ coordinates : { $near : {$geometry: {type: "MultiPolygon", coordinates:[-46.57421, -52.56489]}} }})
-
-        const partner = await Partner.find({ coordinates : { $nearSphere : [-46.57421, -52.56489]}})
+        console.log(`lat${lat} long${long}`)
+        // console.log(partner)
 
         return response.status(200).json(partner);
+
+        
+        // const partner = await Partner.find({ coordinates : { $nearSphere : [-46.57421, -52.56489]}})
         
         // try {
         //     if(lat && long){
-        //         const partner = await Partner.find({ coordinates : { $near : {$geometry: {type: "MultiPolygon", coordinates:[-46.57421, -52.56489]}} }})
-        //         // const partner = await Partner.find({ coordinates : { $near : [long, lat]} })
+                
+        //         const location =  {type: 'Point', coordinates: [lat, long] }
 
-        //         console.log(partner)
-        
-        //         return response.status(200).json(partner);
+
+        //         // const nearPartner = await Partner.findOne(location).where('address');
+        //         // const partnerCoverageAreaCheck = (nearPartner) ? await Partner.findOne(location).where('coverageArea').within('') : [];
+
+        //         return (partnerCoverageAreaCheck) ? response.status(200).json(partnerCoverageAreaCheck) : response.status(400).json({message: `Partner not found for Latitude:${lat} Longitude:${long}`})
         //     }else{
         //         return response.status(400).json({
         //             message: "Is needed latitude and longitude fields"

@@ -9,68 +9,36 @@ const multiPolygonSchema = new Schema({
     },
     coordinates: {
       type: [[[[Number]]]],
-      required: true
+      required: true,
+      index: '2d'
     }
 });
 
 const pointSchema = new Schema({
     type: {
       type: String,
-      enum: ['Point'],
+      default: 'Point',
       required: true
     },
     coordinates: {
       type: [Number],
-      required: true
+      required: true      
     }
 });
+
 
 const PartnerSchema = new Schema({
     id: String, 
     tradingName: String,
     ownerName: String,
     document: {type: String, unique: true},
-    coverageArea: multiPolygonSchema,
-    address: pointSchema
+    coverageArea: {type: multiPolygonSchema, index: '2dsphere'},
+    address: {type: pointSchema, index: '2dsphere'}
 },{
     timestamps: true,
 })
 
-
-// const PartnerSchema = new Schema({
-//   id: String, 
-//   tradingName: String,
-//   ownerName: String,
-//   document: {type: String, unique: true},
-//   coverageArea: {
-//                   type: {
-//                     type: String,
-//                     enum: ['MultiPolygon'],
-//                     required: true
-//                   },
-//                   coordinates: {
-//                     type: [[[[Number]]]],
-//                     required: true
-//                   }
-//   },
-//   address: {
-//               type: {
-//                 type: String,
-//                 enum: ['Point'],
-//                 required: true
-//               },
-//               coordinates: {
-//                 type: [Number],
-//                 required: true
-//               }
-//   }
-// },{
-//   timestamps: true,
-// })
-
-PartnerSchema.path('document').index({unique: true});
-// PartnerSchema.index({document: 1});
-PartnerSchema.index({ "coverageArea": "2dsphere" })
-PartnerSchema.index({ "adress": "2dsphere" })
+// PartnerSchema.path('document').index({unique: true});
+// PartnerSchema.indexes();
 
 export default model<PartnerInterface>('Partner', PartnerSchema)

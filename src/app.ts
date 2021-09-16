@@ -20,7 +20,8 @@ class App {
 
     private database (): void {
         
-        mongoose.connect('mongodb://localhost:27017/partnersdb', { autoIndex: false });
+        mongoose.connect('mongodb://localhost:27017/partnersdb');
+        // mongoose.connect('mongodb://localhost:27017/partnersdb', { autoIndex: false });
     }
 
     private routes (): void {
