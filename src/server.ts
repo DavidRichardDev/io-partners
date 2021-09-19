@@ -1,3 +1,7 @@
 import app from './app'
+import * as dotenv from 'dotenv'
 
-app.listen(3001)
+dotenv.config()
+const server = app.express.listen(process.env.TEST === true ? 3002 : 3001)
+
+export default server

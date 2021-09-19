@@ -1,32 +1,32 @@
 import express from 'express'
 import cors from 'cors'
-import mongoose from 'mongoose'
 import routes from './routes'
+import * as dotenv from 'dotenv'
+import { connectDb } from './service/database'
 
 class App {
-    public express: express.Application
-    
-    public constructor () {
-        this.express = express()
-        this.middlewares();
-        this.database();
-        this.routes();
-    }
+  public express: express.Application
 
-    private middlewares ():void {
-        this.express.use(express.json())
-        this.express.use(cors())
-    }
+  public constructor() {
+    this.express = express()
+    this.middlewares();
+    this.database();
+    this.routes();
+  }
 
-    private database (): void {
-        
-        mongoose.connect('mongodb://localhost:27017/partnersdb');
-        // mongoose.connect('mongodb://localhost:27017/partnersdb', { autoIndex: false });
-    }
+  private middlewares(): void {
+    this.express.use(express.json())
+    this.express.use(cors())
+  }
 
-    private routes (): void {
-        this.express.use('/api/v1', routes)
-    }
+  private database(): void {
+    dotenv.config()
+    connectDb(process.env.TEST === true ? process.env.MONGODB_TEST_URL as string : process.env.MONGODB_URL as string)
+  }
+
+  private routes(): void {
+    this.express.use('/api/v1', routes)
+  }
 }
 
-export default new App().express
+export default new App()
