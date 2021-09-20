@@ -93,14 +93,12 @@ The application is running on http://localhost:3001/api/v1.
 
 #### Run application locally
 
-After having cloned the repository and having all the requirements installed, run the MongoDB in your default port (27017), creating a database called partnersdb.
-
-If you want to manage with a graphic interface, you can to install the MongoDB Compass Community or Robo 3T to handle the MongoDB.
-
-Execute the following commands to run the application:
+After having cloned the repository and having all the requirements installed, execute the following commands to run the application.
 
     - yarn
     - yarn dev
+
+If you want to manage database with a graphic interface, you can open the MongoDB Compass Community to handle the MongoDB click on connect > connect to. It is already been installed when MongoDB was installed.
 
 #### Running the tests
 
