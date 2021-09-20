@@ -11,7 +11,7 @@ const multiPolygonSchema = new Schema({
     type: [[[[Number]]]],
     required: true
   }
-});
+})
 
 const pointSchema = new Schema({
   type: {
@@ -23,8 +23,7 @@ const pointSchema = new Schema({
     type: [Number],
     required: true
   }
-});
-
+})
 
 const PartnerSchema = new Schema({
   id: String,

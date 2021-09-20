@@ -9,9 +9,9 @@ class App {
 
   public constructor() {
     this.express = express()
-    this.middlewares();
-    this.database();
-    this.routes();
+    this.middlewares()
+    this.database()
+    this.routes()
   }
 
   private middlewares(): void {
@@ -21,7 +21,7 @@ class App {
 
   private database(): void {
     dotenv.config()
-    connectDb(process.env.TEST === true ? process.env.MONGODB_TEST_URL as string : process.env.MONGODB_URL as string)
+    connectDb(process.env.NODE_ENV === 'test' ? process.env.MONGODB_TEST_URL as string : process.env.MONGODB_URL as string)
   }
 
   private routes(): void {

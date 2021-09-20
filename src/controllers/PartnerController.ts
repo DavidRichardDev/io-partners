@@ -1,14 +1,21 @@
 import { Request, Response } from 'express'
 import Partner from '../schemas/Partner'
 import { v4 as uuidv4 } from 'uuid'
+import { isArray } from 'util';
 
 class PartnerController {
 	public async index(request: Request, response: Response): Promise<Response> {
-		const { id } = request.params;
+		const { id } = request.params
 
 		try {
-			const partners = id ? await Partner.findOne({ id }) : await Partner.find();
+			const partners = id ? await Partner.findOne({ id }) : await Partner.find()
 
+			if (!partners) {
+				return response.status(400).json({ message: 'Partner not found.' })
+			}
+			if (Array.isArray(partners) && !partners.length) {
+				return response.status(400).json({ message: 'No partner registered.' })
+			}
 			return response.status(200).json(partners)
 		} catch (err) {
 			return response.status(400).json({
@@ -18,7 +25,6 @@ class PartnerController {
 	}
 
 	public async store(request: Request, response: Response): Promise<Response> {
-
 		try {
 			request.body.id = uuidv4()
 			const partner = await Partner.create(request.body)
@@ -63,7 +69,7 @@ class PartnerController {
 					}
 				]).sort('-calc')
 
-				return (partner.length)
+				return partner.length
 					? response.status(200).json(partner[0])
 					: response.status(400).json({
 						message: `Partner not found for coordinates Lat:${lat} and Long:${long}`
